@@ -1,6 +1,7 @@
 # RuleEngine
 
-This a customised Rule Engine implemented in python
+This a customised Rule Engine implemented in python.
+
 Provides 3 features ->
   1) Create a new rule
   2) Edit an existing rule
