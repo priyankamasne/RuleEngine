@@ -50,7 +50,8 @@ class DataUnit:
 
         """
         if self.value_type not in ('string', 'integer', 'datetime'):
-            raise InvalidDatatypeError("InvalidDatatypeError: invalid data type")
+            raise InvalidDatatypeError("InvalidDatatypeError: currently we only support "
+                                       "string, integer and datetime datatypes ")
 
     def _verify_value_against_value_type(self):
         """
@@ -125,6 +126,9 @@ class Rule:
             raise RuleExistsError("RuleExistsError: Rule for signal %s already exists."
                                   "Please edit the rule if you wish to "
                                   "make changes to the existing rule" % self.signal)
+        if self.value_type not in ('string', 'integer', 'datetime'):
+            raise InvalidDatatypeError("currently we only support "
+                                       "string, integer and datetime datatypes ")
         rules[0][self.signal] = {}
         rules[0][self.signal]['rule'] = self.rule
         rules[0][self.signal]['value_type'] = self.value_type.lower()
@@ -142,6 +146,9 @@ class Rule:
         if self.signal not in rules[0].keys():
             raise RuleMissingError("RuleMissingError: Rule for signal %s does not exist."
                                    "Please create the rule first. " % self.signal)
+        if self.value_type not in ('string', 'integer', 'datetime'):
+            raise InvalidDatatypeError("currently we only support "
+                                       "string, integer and datetime datatypes ")
         rules[0][self.signal]['rule'] = self.rule
         rules[0][self.signal]['value_type'] = self.value_type.lower()
         with open('etc/rule_book.json', 'w') as f:
@@ -161,29 +168,29 @@ def getopts():
     parser.add_option("-s", "--signal",
                       help="This key specifies the source ID of the signal. "
                            "It could be any valid alphanumeric combo. "
-                           "ex: ATL1, ATL2, ATL3, ATL4")
+                           "ex: ATL1, ATL2, ATL3, ATL4 ")
     parser.add_option("-v", "--value",
                       help="This would be the actual value of the signal. "
                            "This would always be a string. "
-                           "ex: '234', 'HIGH', 'LOW', '23/07/2017'")
+                           "ex: '234', 'HIGH', 'LOW', '23/07/2017' ")
     parser.add_option("-t", "--value_type",
                       help="This would specify how the value is to interpreted. "
                            "It would be one of the following "
                            "Integer: In this case the value is interpreted to be an integer. "
-                           "    Ex: '234' would be interpreted as 234"
+                           "    Ex: '234' would be interpreted as 234 "
                            "String: In this case the value is interpreted to be a String. "
-                           "    Ex: 'HIGH' would be interpreted as 'HIGH'"
-                           "Datetime: In this case the value is interpreted to be a Date Time.")
+                           "    Ex: 'HIGH' would be interpreted as 'HIGH' "
+                           "Datetime: In this case the value is interpreted to be a Date Time. ")
     parser.add_option("-e", "--edit_rule", action="store_true",
                       help="This is to edit an existing rule. "
-                           "To edit a rule, three keys are required - signal, value_type, rule")
+                           "To edit a rule, three keys are required - signal, value_type, rule ")
     parser.add_option("-c", "--create_rule", action="store_true",
-                      help="This is to create a new rule"
-                           "To create a rule, three keys are required - signal, value_type, rule")
+                      help="This is to create a new rule "
+                           "To create a rule, three keys are required - signal, value_type, rule ")
     parser.add_option("-r", "--rule",
-                      help="This is to define the rule")
+                      help="This is to define the rule ")
     parser.add_option("-f", "--input_file",
-                      help="This is path to the file which gives a bunch of inputs to test")
+                      help="This is path to the file which gives a bunch of inputs to test ")
 
     opts, args = parser.parse_args()
     return opts, args
